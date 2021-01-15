@@ -5,7 +5,11 @@
         <category v-for="category in categories" 
                   :key="category.id" 
                   :dataCategory="category"
-                  @getNewTask="createNewTask"></category>
+                  @getNewTask="createNewTask"
+                  :categories = "categories"
+                  @updatedTask="updatedTask"
+                  @deleteTask="deleteTask"
+                  ></category>
 
       </div>
     </div>
@@ -29,6 +33,15 @@ export default {
   methods: {
     createNewTask(dataTask){
       return this.$emit("newTask", dataTask)
+    },
+    updatedTask(dataUpdatedTask){
+      this.$emit("updatedTask", dataUpdatedTask)
+    },
+    updatedTask(dataUpdatedTask){
+      this.$emit("updatedTask", dataUpdatedTask)
+    },
+    deleteTask(deletedTaskId){
+      this.$emit("deleteTask", deletedTaskId)
     }
   }
 }

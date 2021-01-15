@@ -22,11 +22,9 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="#">Home</a>
           </li>
-          <!-- <li class="nav-item">
-        <a class="nav-link" href="#">Features</a>
-      </li> -->
-          <li class="nav-item">
-            <button type="button" class="btn btn-link nav-link" id="logout-btn">
+
+          <li class="nav-item" v-show="token_nav">
+            <button type="button" class="btn btn-link nav-link" id="logout-btn" @click="logout()">
               Logout
             </button>
           </li>
@@ -62,7 +60,24 @@
 
 <script>
 export default {
-  name: "Navbar"
+  name: "Navbar",
+  props: ["token_nav"],
+  data(){
+    return{
+      
+    }
+  },
+  methods: {
+    logout(){
+      localStorage.clear();
+      this.$emit("logoutPage")
+      var auth2 = gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function () {
+        console.log('User signed out.');
+      });
+    },
+
+  }
 };
 </script>
 
