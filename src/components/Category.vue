@@ -4,7 +4,7 @@
     <div class="card-body p-2">
       <div class="overflow-auto" style="max-height: 73vh;">
 
-        <task v-for="task in dataCategory.Tasks" :key="task.id" :dataTask="task"></task>
+        <task v-for="task in dataCategory.Tasks" :key="task.id" :dataTask="task" :categories = "categories" @updatedTask="updatedTask" @deleteTask="deleteTask"></task>
 
         <task-add v-show="show" :categoryId="dataCategory.id" @newDataTask="createTask"></task-add>
 
@@ -13,7 +13,7 @@
   <div class="card-footer d-grid gap-2">
   <button class="btn btn-primary" type="button" 
           @click="showAddForm();" 
-          >Button</button>
+          >Add New Task</button>
   </div>
   </div>
 </template>
@@ -24,7 +24,7 @@ import TaskAdd from './TaskAdd.vue';
 
 export default {
   name: "category",
-  props: ["dataCategory"],
+  props: ["dataCategory", "categories"],
   data() {
     return {
       show: false,
@@ -44,11 +44,17 @@ export default {
       this.$emit("getNewTask", dataTask)
     },
     showAddForm(){
-      console.log(this.show, 'sebelum');
+      // console.log(this.show, 'sebelum');
       // this.focusEditor()
-      this.show = true
+      this.show = !this.show
       // this.title = ""
-      console.log(this.show, 'sesudah');
+      // console.log(this.show, 'sesudah');
+    },
+    updatedTask(dataUpdatedTask){
+      this.$emit("updatedTask", dataUpdatedTask)
+    },  
+    deleteTask(deletedTaskId){
+      this.$emit("deleteTask", deletedTaskId)
     }
   }
 }

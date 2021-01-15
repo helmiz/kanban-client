@@ -3,7 +3,7 @@
           <div class="card">
             <div class="card-body">
             <form @submit.prevent="createNewTask(categoryId)">
-              <textarea class="form-control" id="titleText" v-model="title" ref="editor" rows="3"></textarea>
+              <textarea class="form-control" v-model="title" ref="editor" rows="3"></textarea>
 
               <div class="col mt-2">
                 <button type="submit" class="btn btn-primary btn-sm shadow rounded">Create</button>

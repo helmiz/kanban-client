@@ -1,9 +1,9 @@
 <template>
   <div>
-    <navbar></navbar>
-    <form-login v-if="currentPage === 'login'" @check-login="checkLogin"></form-login>  
+    <navbar @logoutPage="logoutPage" :token_nav="token_nav"></navbar>
+    <form-login v-if="currentPage === 'login'" @check-login="checkLogin" @loginGoogle="loginGoogle" @userRegister="userRegister"></form-login>  
     <form-register v-else-if="currentPage === 'register'"></form-register>
-    <dashboard v-else-if="currentPage === 'dashboard'" :categories = "categories" @newTask="generateNewTask"></dashboard>
+    <dashboard v-else-if="currentPage === 'dashboard'" :categories = "categories" @newTask="generateNewTask" @updatedTask="updatedTask" @deleteTask="deleteTask"></dashboard>
   </div>
 </template>
 
@@ -21,7 +21,8 @@ export default {
     return {
       currentPage: "login",
       url: 'http://localhost:3000',
-      categories: []
+      categories: [],
+      token_nav: localStorage.access_token
     };
   },
   components: {
@@ -35,8 +36,10 @@ export default {
       if (localStorage.access_token) {
         this.fetchCategories()
         this.currentPage = "dashboard"
+        this.token_nav = localStorage.access_token
       } else {
         this.currentPage = "login"
+        this.token_nav = ""
       }
     },
     checkLogin(dataLogin) {
@@ -49,11 +52,40 @@ export default {
         }
       })
         .then(response => {
-          console.log(response);
           localStorage.setItem("access_token", response.data.access_token)
+          this.checkAuthentication()
         })
         .catch(err => {
-          console.log(err);
+          console.log(err.response.data);
+          Swal.fire({
+            title: err.response.data.Error,
+            text: err.response.data.message,
+            icon: 'error',
+            confirmButtonText: 'Continue'
+          })
+        })
+    },
+    loginGoogle(idToken){
+      // console.log(idToken, "GET DARI APP.VUE");
+      axios({
+        method: "POST",
+        url: this.url + "/googleLogin",
+        data: {
+          id_token: idToken
+        }
+      })
+        .then(response => {
+          console.log(response, "RESPOSNE");
+          localStorage.setItem("access_token", response.data.access_token)
+          this.checkAuthentication()
+        })
+        .catch(err => {
+          Swal.fire({
+            title: err.response.data.Error,
+            text: err.response.data.message,
+            icon: 'error',
+            confirmButtonText: 'Continue'
+          })
         })
     },
     fetchCategories(){
@@ -69,6 +101,12 @@ export default {
         })
         .catch(err => {
           console.log(err);
+          Swal.fire({
+            title: err.response.data.Error,
+            text: err.response.data.message,
+            icon: 'error',
+            confirmButtonText: 'Continue'
+          })
         })
     },
     generateNewTask(dataTask){
@@ -84,13 +122,92 @@ export default {
         }
       })
         .then(response => {
-          console.log(response);
           this.categories.push(response.data)
           this.fetchCategories()
         })
         .catch(err => {
           console.log(err)
+          Swal.fire({
+            title: err.response.data.Error,
+            text: err.response.data.message,
+            icon: 'error',
+            confirmButtonText: 'Continue'
+          })
         })
+    },
+    updatedTask(dataUpdatedTask){
+      axios({
+        method: "PUT",
+        url: this.url + "/tasks/" + dataUpdatedTask.id,
+        data: {
+          title: dataUpdatedTask.title,
+          CategoryId: dataUpdatedTask.CategoryId
+        },
+        headers: {
+          access_token: localStorage.access_token
+        }
+      })
+        .then(response => {
+          this.fetchCategories()
+        })
+        .catch(err => {
+          console.log(err);
+          Swal.fire({
+            title: err.response.data.Error,
+            text: err.response.data.message,
+            icon: 'error',
+            confirmButtonText: 'Continue'
+          })
+        })
+    },
+    deleteTask(deletedTaskId){
+      axios({
+        method: "DELETE",
+        url: this.url + "/tasks/" + deletedTaskId.id,
+        headers: {
+          access_token: localStorage.access_token
+        }
+      })
+        .then(response => {
+          this.fetchCategories()
+        })
+        .catch(err => {
+          console.log(err);
+          Swal.fire({
+            title: err.response.data.Error,
+            text: err.response.data.message,
+            icon: 'error',
+            confirmButtonText: 'Continue'
+          })
+        })
+    },
+    logoutPage(){
+      this.checkAuthentication()
+    },
+    userRegister(dataRegister){
+      axios({
+        method: "POST",
+        url: this.url + "/register",
+        data: {
+          name: dataRegister.name,
+          email: dataRegister.email,
+          password: dataRegister.password
+        }
+      })
+        .then(response => {
+          this.checkAuthentication()
+          this.currentPage = "login"
+        })
+        .catch(err => {
+          console.log(err);
+          Swal.fire({
+            title: err.response.data.Error,
+            text: err.response.data.message,
+            icon: 'error',
+            confirmButtonText: 'Continue'
+          })
+        })
+      
     }
   },
   created(){
