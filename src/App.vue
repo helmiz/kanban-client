@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       currentPage: "login",
-      url: 'http://localhost:3000',
+      url: 'https://h8-kanban-w2.herokuapp.com',
       categories: [],
       token_nav: localStorage.access_token
     };
