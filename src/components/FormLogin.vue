@@ -50,7 +50,7 @@ export default {
     return {
       email: "",
       password: "",
-      clientId: "877379989129-ecc01jf45kj63hdaghjm5dpemib16abn.apps.googleusercontent.com",
+      clientId: "877379989129-e1e5mrpnvmdr16n66b47aubpbcvp3c9d.apps.googleusercontent.com",
       showRegisterLogin: false
     }
   },
