@@ -37,9 +37,6 @@ export default {
     updatedTask(dataUpdatedTask){
       this.$emit("updatedTask", dataUpdatedTask)
     },
-    updatedTask(dataUpdatedTask){
-      this.$emit("updatedTask", dataUpdatedTask)
-    },
     deleteTask(deletedTaskId){
       this.$emit("deleteTask", deletedTaskId)
     }
