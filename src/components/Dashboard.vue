@@ -5,7 +5,7 @@
         <category v-for="category in categories" 
                   :key="category.id" 
                   :dataCategory="category"
-                  @newDataTask="createTask"></category>
+                  @getNewTask="createNewTask"></category>
 
       </div>
     </div>
@@ -27,8 +27,8 @@ export default {
 
   },
   methods: {
-    createTask(payload){
-      return this.$emit("addTask", payload)
+    createNewTask(dataTask){
+      return this.$emit("newTask", dataTask)
     }
   }
 }

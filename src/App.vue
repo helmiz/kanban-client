@@ -3,7 +3,7 @@
     <navbar></navbar>
     <form-login v-if="currentPage === 'login'" @check-login="checkLogin"></form-login>  
     <form-register v-else-if="currentPage === 'register'"></form-register>
-    <dashboard v-else-if="currentPage === 'dashboard'" :categories = "categories" @addTask="formAddTask"></dashboard>
+    <dashboard v-else-if="currentPage === 'dashboard'" :categories = "categories" @newTask="generateNewTask"></dashboard>
   </div>
 </template>
 
@@ -71,8 +71,7 @@ export default {
           console.log(err);
         })
     },
-    formAddTask(dataTask){
-      console.log(dataTask);
+    generateNewTask(dataTask){
       axios({
         method: "POST",
         url: this.url + "/tasks",
@@ -85,6 +84,7 @@ export default {
         }
       })
         .then(response => {
+          console.log(response);
           this.categories.push(response.data)
           this.fetchCategories()
         })

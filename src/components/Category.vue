@@ -6,12 +6,13 @@
 
         <task v-for="task in dataCategory.Tasks" :key="task.id" :dataTask="task"></task>
 
-        <task-add v-show="show"></task-add>
+        <task-add v-show="show" :categoryId="dataCategory.id" @newDataTask="createTask"></task-add>
+
       </div>
     </div>
   <div class="card-footer d-grid gap-2">
   <button class="btn btn-primary" type="button" 
-          @click="showAddForm();"
+          @click="showAddForm();" 
           >Button</button>
   </div>
   </div>
@@ -27,34 +28,29 @@ export default {
   data() {
     return {
       show: false,
-      title: ""
+      // title: ""
     } 
   },
   components: {
     Task,
-    TaskAdd  
+    TaskAdd
   },
   methods: {
-    focusEditor(){
-      this.$refs.editor.focus()
-      // console.log(this.$refs)
-    },
-    createNewTask(id){
-      const dataTask = { CategoryId: id, title:this.title }
-      // console.log(dataTask);
-      this.$emit("newDataTask", dataTask)
-      this.removeAddForm()
+    // focusEditor(){
+    //   this.$refs.editor.focus()
+    //   // console.log(this.$refs)
+    // },
+    createTask(dataTask){
+      this.$emit("getNewTask", dataTask)
     },
     showAddForm(){
+      console.log(this.show, 'sebelum');
       // this.focusEditor()
       this.show = true
-      this.title = ""
-    },
-    removeAddForm(){
-      this.show = false
-      this.title = ""
+      // this.title = ""
+      console.log(this.show, 'sesudah');
     }
-  },
+  }
 }
 </script>
 

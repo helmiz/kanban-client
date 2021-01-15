@@ -25,9 +25,9 @@ export default {
   data() {
     return {}
   },
-  created(){
-    console.log(this.dataTask);
-  }
+  // created(){
+  //   console.log(this.dataTask);
+  // }
 }
 </script>
 
